@@ -1,0 +1,24 @@
+version: "3.7"
+
+services:
+  item-app: # app service
+    image: riorb/item-app:v1 # image dari Docker Hub
+    command: sh -c "npm start" # perintah untuk start service
+    ports: # port mapping
+      - 80:8080
+    working_dir: /app # working directory
+    environment: # environment variables
+      NODE_ENV: production
+      DB_HOST: item-db
+    depends_on: # item-app berjalan setelah item-db dijalankan
+      - item-db
+    restart: always # restart policy
+
+  item-db:
+    image: mongo:3 # Menggunakan image mongo:3 dari Docker Hub
+    volumes: # memakai volume
+        - app-db:/data/db
+    restart: always # restart policy
+
+volumes: # volume untuk database
+  app-db:
